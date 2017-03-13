@@ -1,3 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<items version="2" />
+<items version="2" >
 
+    <item
+        jar="D:\Workspace_Android\instagram-exam\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\classes.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="2c91c949a45a21cdecf26e03951e46c7beec9ad8">
+        <dex dex="D:\Workspace_Android\instagram-exam\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-21.0.3_54718665f20be10bd20d34aaba9740bae4f87573\classes.dex" />
+    </item>
+    <item
+        jar="D:\Workspace_Android\instagram-exam\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\jars\libs\internal_impl-21.0.3.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="D:\Workspace_Android\instagram-exam\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-21.0.3_4bbc305648df27ba9f1264cc533de9f99efe7a88\classes.dex" />
+    </item>
+    <item
+        jar="D:\Workspace_Android\instagram-exam\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="b32f06916718115e41b9e2e3fd47958a4e6d1e83">
+        <dex dex="D:\Workspace_Android\instagram-exam\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_a116c030c8a62e7677c9d75dae4c929a1a62c08c\classes.dex" />
+    </item>
+    <item
+        jar="D:\Workspace_Android\instagram-exam\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\jars\classes.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="D:\Workspace_Android\instagram-exam\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-21.0.3_c26fb79d79ed3787088b627396dc8112ed79c356\classes.dex" />
+    </item>
+    <item
+        jar="D:\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="D:\Workspace_Android\instagram-exam\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-21.0.3_aa16b3cf885393ef74ba8407c65bcf20627dd05b\classes.dex" />
+    </item>
+    <item
+        jar="D:\Workspace_Android\instagram-exam\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="98e015e7eccf68e3ed871c56d3e8bcbf5fe47da5">
+        <dex dex="D:\Workspace_Android\instagram-exam\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_d724c25867880086d6f24d48a917cadfe188fad5\classes.dex" />
+    </item>
+    <item
+        jar="D:\Workspace_Android\instagram-exam\app\libs\android-async-http-1.4.6.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="a845a88238be0b5be9d238652c1bc0605ef91f52">
+        <dex dex="D:\Workspace_Android\instagram-exam\app\build\intermediates\transforms\dex\debug\folders\1000\2\android-async-http-1.4.6_2d9005107ac818b628ec4c75f2aeba33275cf24a\classes.dex" />
+    </item>
+    <item
+        jar="D:\Workspace_Android\instagram-exam\app\libs\picasso-2.4.0.jar"
+        jumboMode="true"
+        revision="21.1.2"
+        sha1="f36d2d4e3a36b3259aaf9d004d29b4cdc6c1bfb2">
+        <dex dex="D:\Workspace_Android\instagram-exam\app\build\intermediates\transforms\dex\debug\folders\1000\2\picasso-2.4.0_02f0b3f94c4841eee20bfea47c2f19ab5f5bdce1\classes.dex" />
+    </item>
+
+</items>

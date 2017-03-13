@@ -5,17 +5,14 @@ package com.example;
  * com.example.instagram-exam
  */
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -40,6 +37,7 @@ public class MainActivity extends ActionBarActivity {
     private Photo photo;
     private boolean lockListView;
     private String photoID;
+    private String more_available;
 
 
     @Override
@@ -53,32 +51,22 @@ public class MainActivity extends ActionBarActivity {
         photos = new ArrayList<Photo>(); // 이미지 리스트
         // 리스트 바인딩
         aPhotos = new PhotosAdapter(this, photos);
+
         // 이미지 리스트뷰
         lvPhotos = (ListView) findViewById(R.id.lvPhotos);
         lvPhotos.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         lvPhotos.setOnScrollListener(new EndlessScrollListener());
+
         lvPhotos.setAdapter(aPhotos);
-
-        lvPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this,"3333333333333", Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(MainActivity.this, MyViewFlipperActivity.class);
-                intent.putExtra("photo_id", position);
-                startActivity(intent);
-                finish();
-            }
-        });
-
-
 
         // 새로고침 리스너
         swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 searchParam = searchText.getText().toString();
-                fetchPopularPhotos(searchParam, "");
+                if("true".equals(more_available))
+                    fetchPopularPhotos(searchParam, "");
             }
         });
 
@@ -100,17 +88,19 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void fetchPopularPhotos(String searchTxt, String maxId) {
-        if("".equals(searchTxt))
+        if("".equals(searchTxt)) {
             searchTxt = "design";
+        }
+
 
         if("".equals(maxId)){
             maxId = "0";
         }
+        aPhotos.setSearchText(searchTxt);
 
         searchTextFinal = searchTxt;
         // 이미지 가져올 url
         String popularUrl = "https://www.instagram.com/"+searchTxt+"/media/?max_id="+maxId;
-
         // 비동기 네트워크
         AsyncHttpClient client = new AsyncHttpClient();
 
@@ -121,51 +111,8 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
 
-                JSONArray photosJSON = null;
-                JSONArray commentsJSON = null;
-                try {
-                    photos.clear();
-                    // json 데이터 파싱
-                    photosJSON = response.getJSONArray("items");
-                    for (int i = 0; i < photosJSON.length(); i++) {
-                        JSONObject photoJSON = photosJSON.getJSONObject(i);
-                        photo = new Photo();
-                        photo.profileUrl = photoJSON.getJSONObject("user").getString("profile_picture");
-                        photo.username = photoJSON.getJSONObject("user").getString("username");
+                parseJson(response);
 
-                        if (photoJSON.has("caption") && !photoJSON.isNull("caption")) {
-                            photo.caption = photoJSON.getJSONObject("caption").getString("text");
-                        }
-                        photo.createdTime = photoJSON.getString("created_time");
-                        photo.imageUrl = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url");
-                        photo.imageHeight = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height");
-                        photo.likesCount = photoJSON.getJSONObject("likes").getInt("count");
-
-                        if (photoJSON.has("comments") && !photoJSON.isNull("comments")) {
-                            photo.commentsCount = photoJSON.getJSONObject("comments").getInt("count");
-                            commentsJSON = photoJSON.getJSONObject("comments").getJSONArray("data");
-                            if (commentsJSON.length() > 0) {
-                                photo.comment1 = commentsJSON.getJSONObject(commentsJSON.length() - 1).getString("text");
-                                photo.user1 = commentsJSON.getJSONObject(commentsJSON.length() - 1).getJSONObject("from").getString("username");
-                                if (commentsJSON.length() > 1) {
-                                    photo.comment2 = commentsJSON.getJSONObject(commentsJSON.length() - 2).getString("text");
-                                    photo.user2 = commentsJSON.getJSONObject(commentsJSON.length() - 2).getJSONObject("from").getString("username");
-                                }
-                            } else {
-                                photo.commentsCount = 0;
-                            }
-                        }
-                        photo.id = photoJSON.getString("id");
-                        photos.add(photo);
-                    }
-                    // 리스트 변경사항
-                    aPhotos.notifyDataSetChanged();
-
-
-                } catch (JSONException e ) {
-                    // json 파싱 에러
-                    e.printStackTrace();
-                }
                 swipeContainer.setRefreshing(false);
 
             }
@@ -175,6 +122,56 @@ public class MainActivity extends ActionBarActivity {
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
         });
+    }
+
+
+    private void parseJson(JSONObject response){
+        JSONArray photosJSON = null;
+        JSONArray commentsJSON = null;
+        try {
+            photos.clear();
+            // json 데이터 파싱
+            photosJSON = response.getJSONArray("items");
+            for (int i = 0; i < photosJSON.length(); i++) {
+                JSONObject photoJSON = photosJSON.getJSONObject(i);
+                photo = new Photo();
+                photo.profileUrl = photoJSON.getJSONObject("user").getString("profile_picture");
+                photo.username = photoJSON.getJSONObject("user").getString("username");
+
+                if (photoJSON.has("caption") && !photoJSON.isNull("caption")) {
+                    photo.caption = photoJSON.getJSONObject("caption").getString("text");
+                }
+                photo.createdTime = photoJSON.getString("created_time");
+                photo.imageUrl = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url");
+                photo.imageHeight = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height");
+                photo.likesCount = photoJSON.getJSONObject("likes").getInt("count");
+
+                if (photoJSON.has("comments") && !photoJSON.isNull("comments")) {
+                    photo.commentsCount = photoJSON.getJSONObject("comments").getInt("count");
+                    commentsJSON = photoJSON.getJSONObject("comments").getJSONArray("data");
+                    if (commentsJSON.length() > 0) {
+                        photo.comment1 = commentsJSON.getJSONObject(commentsJSON.length() - 1).getString("text");
+                        photo.user1 = commentsJSON.getJSONObject(commentsJSON.length() - 1).getJSONObject("from").getString("username");
+                        if (commentsJSON.length() > 1) {
+                            photo.comment2 = commentsJSON.getJSONObject(commentsJSON.length() - 2).getString("text");
+                            photo.user2 = commentsJSON.getJSONObject(commentsJSON.length() - 2).getJSONObject("from").getString("username");
+                        }
+                    } else {
+                        photo.commentsCount = 0;
+                    }
+                }
+                photo.id = photoJSON.getString("id");
+                photos.add(photo);
+            }
+            more_available = response.getString("more_available");
+            // 리스트 변경사항
+            aPhotos.notifyDataSetChanged();
+
+
+        } catch (JSONException e ) {
+            // json 파싱 에러
+            e.printStackTrace();
+        }
     }
 
 
@@ -204,7 +201,8 @@ public class MainActivity extends ActionBarActivity {
             //OnScrollListener.SCROLL_STATE_IDLE은 스크롤이 이동하다가 멈추었을때 발생되는 스크롤
             //즉 스크롤이 바닦에 닿아 멈춘 상태에 처리를 하겠다는 뜻
             if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE && lockListView) {
-                fetchPopularPhotos(searchTextFinal, photo.id);
+                if("true".equals(more_available))
+                    fetchPopularPhotos(searchTextFinal, photo.id);
             }
         }
     }
